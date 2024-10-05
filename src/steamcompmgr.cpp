@@ -2595,6 +2595,10 @@ paint_all( global_focus_t *pFocus, bool async )
 					paint_window(w, w, &frameInfo, pFocus->cursor, PaintWindowFlag::BasePlane | PaintWindowFlag::DrawBorders, 1.0f, override);
 
 					bool needsScaling = frameInfo.layers[0].scale.x < 0.999f && frameInfo.layers[0].scale.y < 0.999f;
+					// Temporarily allow upscaling as well
+					// bool needsDownScaling = frameInfo.layers[0].scale.x > 1.001f && frameInfo.layers[0].scale.y > 1.001f;
+					bool needsDownScaling = true;
+					frameInfo.useBICUBICLayer0 = g_downscaleFilter == GamescopeDownscaleFilter::BICUBIC && needsDownScaling;
 					frameInfo.useFSRLayer0 = g_upscaleFilter == GamescopeUpscaleFilter::FSR && needsScaling;
 					frameInfo.useNISLayer0 = g_upscaleFilter == GamescopeUpscaleFilter::NIS && needsScaling;
 				}
@@ -2736,6 +2740,7 @@ paint_all( global_focus_t *pFocus, bool async )
 		}
 
 		frameInfo.useFSRLayer0 = false;
+		frameInfo.useBICUBICLayer0 = false;
 		frameInfo.useNISLayer0 = false;
 	}
 
@@ -8763,6 +8768,7 @@ steamcompmgr_main(int argc, char **argv)
 			g_bSteamIsActiveWindow = false;
 			g_upscaleScaler = g_wantedUpscaleScaler;
 			g_upscaleFilter = g_wantedUpscaleFilter;
+			g_downscaleFilter = g_wantedDownscaleFilter;
 		}
 
 		// If we're in the middle of a fade, then keep us
