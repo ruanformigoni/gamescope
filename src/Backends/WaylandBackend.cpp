@@ -2927,6 +2927,16 @@ namespace gamescope
                     return;
                 }
 
+                case KEY_K:
+                {
+                    if ( !bPressed )
+                    {
+                        g_wantedDownscaleFilter = (g_wantedDownscaleFilter == GamescopeDownscaleFilter::BICUBIC) ?
+                            GamescopeDownscaleFilter::LINEAR : GamescopeDownscaleFilter::BICUBIC;
+                    }
+                    return;
+                }
+
                 case KEY_Y:
                 {
                     if ( !bPressed )
